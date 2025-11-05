@@ -3,7 +3,13 @@ import axios from 'axios';
 
 const AuthContext = createContext();
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -14,8 +20,15 @@ export const AuthProvider = ({ children }) => {
     const userData = localStorage.getItem('user');
     
     if (token && userData) {
-      setUser(JSON.parse(userData));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      try {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
     }
     
     setLoading(false);
@@ -24,47 +37,93 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await axios.post('http://localhost:5000/auth/login', {
-        email,
-        password
+        email: email.trim(),
+        password: password
       });
       
-      const { access_token, user } = response.data;
-      localStorage.setItem('token', access_token);
-      localStorage.setItem('user', JSON.stringify(user));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-      setUser(user);
-      
-      return { success: true };
+      if (response.data && response.data.access_token) {
+        const { access_token, user } = response.data;
+        
+        // Store token and user data
+        localStorage.setItem('token', access_token);
+        localStorage.setItem('user', JSON.stringify(user));
+        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        setUser(user);
+        
+        return { success: true, user };
+      } else {
+        return { 
+          success: false, 
+          error: 'Invalid response from server' 
+        };
+      }
     } catch (error) {
+      console.error('Login error:', error);
+      let errorMessage = 'Login failed. Please check your credentials.';
+      
+      if (error.response) {
+        // Server responded with error status
+        errorMessage = error.response.data?.error || errorMessage;
+      } else if (error.request) {
+        // Request was made but no response received
+        errorMessage = 'Unable to connect to server. Please try again.';
+      }
+      
       return { 
         success: false, 
-        error: error.response?.data?.error || 'Login failed' 
+        error: errorMessage 
       };
     }
   };
 
   const register = async (name, email, password) => {
     try {
-      await axios.post('http://localhost:5000/auth/register', {
-        name,
-        email,
-        password
+      const response = await axios.post('http://localhost:5000/auth/register', {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        password: password
       });
       
-      return { success: true };
+      if (response.status === 201) {
+        return { success: true };
+      } else {
+        return { 
+          success: false, 
+          error: response.data?.error || 'Registration failed' 
+        };
+      }
     } catch (error) {
+      console.error('Registration error:', error);
+      let errorMessage = 'Registration failed. Please try again.';
+      
+      if (error.response) {
+        errorMessage = error.response.data?.error || errorMessage;
+      } else if (error.request) {
+        errorMessage = 'Unable to connect to server. Please try again.';
+      }
+      
       return { 
         success: false, 
-        error: error.response?.data?.error || 'Registration failed' 
+        error: errorMessage 
       };
     }
   };
 
   const logout = () => {
+    // Clear local storage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    
+    // Clear axios headers
     delete axios.defaults.headers.common['Authorization'];
+    
+    // Clear user state
     setUser(null);
+  };
+
+  const updateUser = (updatedUser) => {
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
   };
 
   const value = {
@@ -72,7 +131,11 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    loading
+    updateUser,
+    loading,
+    isAuthenticated: !!user,
+    isAdmin: user?.role === 'admin',
+    isEmployee: user?.role === 'employee'
   };
 
   return (

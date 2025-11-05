@@ -62,82 +62,89 @@ function AdminDashboard() {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Admin Dashboard</h1>
-        <div>
-          <span>Welcome, {user?.name} </span>
-          <button onClick={logout} style={{ marginLeft: '10px' }}>Logout</button>
+    <div className="container">
+      <div className="navbar">
+        <div className="navbar-content">
+          <h1>Admin Dashboard</h1>
+          <div>
+            <span>Welcome, {user?.name} </span>
+            <button onClick={logout} className="btn btn-primary" style={{ marginLeft: '10px' }}>Logout</button>
+          </div>
         </div>
       </div>
 
-      {message && <p style={{ color: message.includes('success') ? 'green' : 'red' }}>{message}</p>}
+      {message && (
+        <div className={`alert ${message.includes('success') ? 'alert-success' : 'alert-error'}`}>
+          {message}
+        </div>
+      )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '20px', marginBottom: '30px' }}>
-        <div style={{ padding: '20px', backgroundColor: '#f0f8ff', borderRadius: '5px', textAlign: 'center' }}>
+      <div className="stats-grid">
+        <div className="stat-card">
           <h3>Total Requests</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.total_requests || 0}</p>
+          <div className="number">{stats.total_requests || 0}</div>
         </div>
-        <div style={{ padding: '20px', backgroundColor: '#fff3cd', borderRadius: '5px', textAlign: 'center' }}>
+        <div className="stat-card">
           <h3>Pending</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.pending_requests || 0}</p>
+          <div className="number">{stats.pending_requests || 0}</div>
         </div>
-        <div style={{ padding: '20px', backgroundColor: '#d4edda', borderRadius: '5px', textAlign: 'center' }}>
+        <div className="stat-card">
           <h3>Approved</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.approved_requests || 0}</p>
+          <div className="number">{stats.approved_requests || 0}</div>
         </div>
-        <div style={{ padding: '20px', backgroundColor: '#f8d7da', borderRadius: '5px', textAlign: 'center' }}>
+        <div className="stat-card">
           <h3>Rejected</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.rejected_requests || 0}</p>
+          <div className="number">{stats.rejected_requests || 0}</div>
         </div>
-        <div style={{ padding: '20px', backgroundColor: '#e2e3e5', borderRadius: '5px', textAlign: 'center' }}>
+        <div className="stat-card">
           <h3>Employees</h3>
-          <p style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.total_employees || 0}</p>
+          <div className="number">{stats.total_employees || 0}</div>
         </div>
       </div>
 
-      <div style={{ marginBottom: '30px' }}>
+      <div className="card">
         <h2>All Leave Requests</h2>
         {leaveRequests.length === 0 ? (
           <p>No leave requests found.</p>
         ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table className="table">
             <thead>
-              <tr style={{ backgroundColor: '#f5f5f5' }}>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Employee</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Start Date</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>End Date</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Reason</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Status</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Created At</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Actions</th>
+              <tr>
+                <th>Employee</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {leaveRequests.map((request) => (
                 <tr key={request.id}>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{request.employee_name}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{request.start_date}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{request.end_date}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{request.reason}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd', color: getStatusColor(request.status) }}>
+                  <td>{request.employee_name}</td>
+                  <td>{request.start_date}</td>
+                  <td>{request.end_date}</td>
+                  <td>{request.reason}</td>
+                  <td style={{ color: getStatusColor(request.status), fontWeight: 'bold' }}>
                     {request.status}
                   </td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                  <td>
                     {new Date(request.created_at).toLocaleDateString()}
                   </td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                  <td>
                     {request.status === 'pending' && (
                       <>
                         <button 
                           onClick={() => updateStatus(request.id, 'approved')}
-                          style={{ marginRight: '5px', backgroundColor: 'green', color: 'white', border: 'none', padding: '5px 10px', cursor: 'pointer' }}
+                          className="btn btn-success"
+                          style={{ marginRight: '5px' }}
                         >
                           Approve
                         </button>
                         <button 
                           onClick={() => updateStatus(request.id, 'rejected')}
-                          style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '5px 10px', cursor: 'pointer' }}
+                          className="btn btn-danger"
                         >
                           Reject
                         </button>
@@ -151,27 +158,27 @@ function AdminDashboard() {
         )}
       </div>
 
-      <div>
+      <div className="card">
         <h2>Employees</h2>
         {users.filter(u => u.role === 'employee').length === 0 ? (
           <p>No employees found.</p>
         ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table className="table">
             <thead>
-              <tr style={{ backgroundColor: '#f5f5f5' }}>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Name</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Email</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Role</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Joined</th>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Joined</th>
               </tr>
             </thead>
             <tbody>
               {users.filter(u => u.role === 'employee').map((user) => (
                 <tr key={user.id}>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.name}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.email}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.role}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.role}</td>
+                  <td>
                     {new Date(user.created_at).toLocaleDateString()}
                   </td>
                 </tr>
@@ -184,4 +191,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default AdminDashboard; // Make sure this line exists

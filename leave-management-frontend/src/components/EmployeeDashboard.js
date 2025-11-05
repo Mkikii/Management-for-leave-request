@@ -55,73 +55,82 @@ function EmployeeDashboard() {
   };
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Employee Dashboard</h1>
-        <div>
-          <span>Welcome, {user?.name} </span>
-          <button onClick={logout} style={{ marginLeft: '10px' }}>Logout</button>
+    <div className="container">
+      <div className="navbar">
+        <div className="navbar-content">
+          <h1>Employee Dashboard</h1>
+          <div>
+            <span>Welcome, {user?.name} </span>
+            <button onClick={logout} className="btn btn-primary" style={{ marginLeft: '10px' }}>Logout</button>
+          </div>
         </div>
       </div>
 
-      <div style={{ marginBottom: '30px' }}>
+      <div className="card">
         <h2>Submit Leave Request</h2>
         <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '10px' }}>
-          <input
-            type="date"
-            name="start_date"
-            value={formData.start_date}
-            onChange={handleChange}
-            required
-            style={{ padding: '8px' }}
-          />
-          <input
-            type="date"
-            name="end_date"
-            value={formData.end_date}
-            onChange={handleChange}
-            required
-            style={{ padding: '8px' }}
-          />
-          <textarea
-            name="reason"
-            placeholder="Reason for leave"
-            value={formData.reason}
-            onChange={handleChange}
-            required
-            rows="4"
-            style={{ padding: '8px' }}
-          />
-          <button type="submit" style={{ padding: '10px' }}>Submit Request</button>
+          <div className="form-group">
+            <input
+              type="date"
+              name="start_date"
+              value={formData.start_date}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              type="date"
+              name="end_date"
+              value={formData.end_date}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <textarea
+              name="reason"
+              placeholder="Reason for leave"
+              value={formData.reason}
+              onChange={handleChange}
+              required
+              rows="4"
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">Submit Request</button>
         </form>
-        {message && <p style={{ color: message.includes('success') ? 'green' : 'red' }}>{message}</p>}
+        {message && (
+          <div className={`alert ${message.includes('success') ? 'alert-success' : 'alert-error'}`}>
+            {message}
+          </div>
+        )}
       </div>
 
-      <div>
+      <div className="card">
         <h2>My Leave Requests</h2>
         {leaveRequests.length === 0 ? (
           <p>No leave requests found.</p>
         ) : (
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table className="table">
             <thead>
-              <tr style={{ backgroundColor: '#f5f5f5' }}>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Start Date</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>End Date</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Reason</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Status</th>
-                <th style={{ padding: '10px', border: '1px solid #ddd' }}>Created At</th>
+              <tr>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Created At</th>
               </tr>
             </thead>
             <tbody>
               {leaveRequests.map((request) => (
                 <tr key={request.id}>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{request.start_date}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{request.end_date}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>{request.reason}</td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd', color: getStatusColor(request.status) }}>
+                  <td>{request.start_date}</td>
+                  <td>{request.end_date}</td>
+                  <td>{request.reason}</td>
+                  <td style={{ color: getStatusColor(request.status), fontWeight: 'bold' }}>
                     {request.status}
                   </td>
-                  <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                  <td>
                     {new Date(request.created_at).toLocaleDateString()}
                   </td>
                 </tr>
@@ -134,4 +143,4 @@ function EmployeeDashboard() {
   );
 }
 
-export default EmployeeDashboard;
+export default EmployeeDashboard; 

@@ -4,8 +4,10 @@ from app import db
 from app.models import LeaveRequest, User
 from datetime import datetime
 
+# Define the blueprint FIRST
 leaves_bp = Blueprint('leaves', __name__)
 
+# THEN use the route decorators
 @leaves_bp.route('/leaves', methods=['POST'])
 @jwt_required()
 def create_leave_request():

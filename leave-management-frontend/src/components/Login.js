@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,6 +11,7 @@ function Login() {
   });
   const [message, setMessage] = useState('');
   const { login, register } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,6 +20,18 @@ function Login() {
     let result;
     if (isLogin) {
       result = await login(formData.email, formData.password);
+      if (result.success) {
+        setMessage('Login successful! Redirecting...');
+        // Redirect based on user role
+        setTimeout(() => {
+          if (result.user.role === 'admin') {
+            navigate('/admin');
+          } else {
+            navigate('/employee');
+          }
+        }, 1000);
+        return;
+      }
     } else {
       result = await register(formData.name, formData.email, formData.password);
       if (result.success) {
@@ -28,10 +42,8 @@ function Login() {
       }
     }
     
-    if (result.success) {
-      setMessage('Success!');
-    } else {
-      setMessage(result.error);
+    if (!result.success) {
+      setMessage(result.error || (isLogin ? 'Login failed' : 'Registration failed'));
     }
   };
 
@@ -56,6 +68,7 @@ function Login() {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                autoComplete="name"
               />
             </div>
           )}
@@ -67,6 +80,7 @@ function Login() {
               value={formData.email}
               onChange={handleChange}
               required
+              autoComplete="email"
             />
           </div>
           <div className="form-group">
@@ -77,6 +91,7 @@ function Login() {
               value={formData.password}
               onChange={handleChange}
               required
+              autoComplete={isLogin ? "current-password" : "new-password"}
             />
           </div>
           <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>

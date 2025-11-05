@@ -3,8 +3,10 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
 from app.models import LeaveRequest, User
 
+# Define the blueprint FIRST
 admin_bp = Blueprint('admin', __name__)
 
+# THEN use the route decorators
 @admin_bp.route('/leaves/<int:leave_id>/status', methods=['PATCH'])
 @jwt_required()
 def update_leave_status(leave_id):

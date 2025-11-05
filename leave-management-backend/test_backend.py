@@ -4,7 +4,7 @@ import json
 BASE_URL = "http://localhost:5000"
 
 def test_backend():
-    print("Testing Leave Management System Backend...\n")
+    print("Testing Leave Management System Backend...\\n")
     
     # 1. Test Admin Login
     print("1. Testing Admin Login...")
@@ -25,7 +25,7 @@ def test_backend():
         return
     
     # 2. Test Employee Login
-    print("\n2. Testing Employee Login...")
+    print("\\n2. Testing Employee Login...")
     try:
         response = requests.post(f"{BASE_URL}/auth/login", 
                                json={"email": "john@company.com", "password": "password123"})
@@ -40,7 +40,7 @@ def test_backend():
         print(f"✗ Employee login error: {e}")
     
     # 3. Test Registration
-    print("\n3. Testing Registration...")
+    print("\\n3. Testing Registration...")
     try:
         response = requests.post(f"{BASE_URL}/auth/register", 
                                json={"name": "Test User", "email": "test2@company.com", "password": "test123"})
@@ -53,7 +53,7 @@ def test_backend():
     except Exception as e:
         print(f"✗ Registration error: {e}")
     
-    print("\n✅ Backend testing completed!")
+    print("\\n✅ Backend testing completed!")
 
 if __name__ == '__main__':
     test_backend()

@@ -25,6 +25,7 @@ class User(db.Model):
             'created_at': self.created_at.isoformat()
         }
 
+# LeaveRequest class remains the same...
 class LeaveRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

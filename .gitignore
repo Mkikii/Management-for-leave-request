@@ -1,4 +1,3 @@
-# Backend specific
 __pycache__/
 *.pyc
 *.pyo
@@ -19,8 +18,6 @@ instance/
 *.sqlite
 *.db
 migrations/
-
-# Frontend specific
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -31,41 +28,109 @@ build/
 dist/
 *.tsbuildinfo
 .eslintcache
-
-# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# OS
 .DS_Store
 Thumbs.db
 Desktop.ini
-
-# Logs
 *.log
 logs/
-
-# Environment variables
-.env
 .env.local
 .env.production
 .env.development
-
-# Temporary files
 *.tmp
 *.temp
-
-# Backup files
 *.bak
 *.backup
-
-# Coverage reports
-.coverage
 lcov.info
-
-# Package manager lock files (uncomment based on your preference)
-# package-lock.json
-# yarn.lock
-# Pipfile.lock
+package-lock.json
+yarn.lock
+Pipfile.lock
+*.sqlite3
+.cache
+.ruff_cache
+.mypy_cache
+.tox
+.python-version
+.coverage.*
+*.cover
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+celerybeat-schedule
+*.sage.py
+.ipynb_checkpoints
+profile_default/
+.Trash-*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+*.lnk
+*.app
+*.dmg
+*.iso
+*.msi
+*.msm
+*.msp
+*.deb
+*.rpm
+*.tar.gz
+*.zip
+*.7z
+*.dll
+*.exe
+*.bin
+*.dat
+*.dump
+*.stackdump
+*.cur
+*.ani
+*.ttf
+*.fon
+*.otf
+*.bmp
+*.gif
+*.ico
+*.jpeg
+*.jpg
+*.png
+*.svg
+*.tiff
+*.tif
+*.webp
+*.avi
+*.flv
+*.m4v
+*.mkv
+*.mov
+*.mp4
+*.mpeg
+*.mpg
+*.wmv
+*.webm
+*.aac
+*.flac
+*.m4a
+*.mp3
+*.ogg
+*.wav
+*.wma
+*.doc
+*.docx
+*.pdf
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+*.odt
+*.ods
+*.odp
+*.rtf
+*.tex
+*.wpd
+*.key
+*.numbers
+*.pages

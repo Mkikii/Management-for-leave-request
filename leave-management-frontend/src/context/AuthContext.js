@@ -43,13 +43,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (name, email, password, role = 'employee') => {
+  const register = async (name, email, password) => {
     try {
       await axios.post('http://localhost:5000/auth/register', {
         name,
         email,
-        password,
-        role
+        password
       });
       
       return { success: true };

@@ -1,0 +1,71 @@
+# Backend specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+.venv
+venv/
+instance/
+*.sqlite
+*.db
+migrations/
+
+# Frontend specific
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+.eslintcache
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.bak
+*.backup
+
+# Coverage reports
+.coverage
+lcov.info
+
+# Package manager lock files (uncomment based on your preference)
+# package-lock.json
+# yarn.lock
+# Pipfile.lock

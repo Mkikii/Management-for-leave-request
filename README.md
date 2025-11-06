@@ -1,4 +1,3 @@
-# LEAVE-REQUESTS-MANAGEMENTS
 # Leave Management System
 
 ## Project Overview
